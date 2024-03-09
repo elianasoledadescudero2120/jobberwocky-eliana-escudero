@@ -1,0 +1,4 @@
+**/.env
+**/node_modules
+/jobs/data.csv
+/subscriptions/data.csv
