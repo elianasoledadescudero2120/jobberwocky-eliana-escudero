@@ -35,18 +35,18 @@ export const findJob = async ({ query: filters = {} }) => {
 
 export const createJob = async ({ body }) => {
   const jobs = await retrieveJobs();
-  
+
   if(jobs.find(job => job.name.toLowerCase() === body.name.toLowerCase())) {
     throw { message: errorMessages.repeatedJob};
   }
-
+ 
   await saveJobs([...jobs, body]);
 
   const subscriptions = await getAllSubscriptionsMatchingJob(body);
   const emails = subscriptions.data.map(({email}) => email);
   sendEmails(emails);
 
-  return { data: body, subscriptions };
+  return { data: body };
 }
 
 export const updateJob = async ({ body }) => {
