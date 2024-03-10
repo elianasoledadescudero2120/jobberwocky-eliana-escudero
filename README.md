@@ -26,4 +26,21 @@ Now, you can access [http://localhost:3002/job/all](http://localhost:3002/job/al
 
 This API provides two endpoints: jobs and subscriptions.
 
+All the API responses are JSON-formatted.
+
+All data is stored inside the application using .csv files. The path of the files can be modified through config.js
+
 ### 1. JOBS
+
+A job is made up of the following all required fields:
+
+- name (string)
+- salary (integer)
+- country (string)
+- skills (array of strings)
+
+Our API exposes the following methods to work with jobs:
+
+#### ALL
+
+Accessible through
