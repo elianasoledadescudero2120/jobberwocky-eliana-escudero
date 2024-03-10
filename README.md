@@ -26,7 +26,7 @@ Now, you can access [http://localhost:3002/job/all](http://localhost:3002/job/al
 
 Make sure you have runing in your localhost the JobberwockyExteneralJobs API.
 It should be accessible through: [http://localhost:8080/jobs](http://localhost:8080/jobs).
-The following site offers more information on this: [jobberwocky-extra-source](https://github.com/avatureta/jobberwocky-extra-source).
+The following repository offers more information on this: [jobberwocky-extra-source](https://github.com/avatureta/jobberwocky-extra-source).
 
 ## Description
 
@@ -47,7 +47,7 @@ A job is made up of the following all required fields:
 
 Our API exposes the following methods to work with jobs:
 
-#### ALL
+#### ALL (GET)
 
 Accessible through [http://localhost:3002/job/all](http://localhost:3002/job/all)
 
@@ -60,9 +60,75 @@ Accepts the following query parameters:
 - skills ------------ (value: string with skills comma separated)
 - order_by ---------- (possible values: [name, salary, country, skills])
 - order_direction --- (possible values: 'ASC', 'DESC')
+- origin ------------ (possible values: [local, external])
 
-Offers a list of jobs, filtered by query parameters.
+Offers a list of jobs, filtered by query parameters. The name acts as a key and its unique.
 
-In addition our job-searching service **consumes data from an external job opportunity source** accessible through: [jobberwocky-extra-source](http://localhost:8080/jobs).
+In addition our job-searching service **consumes data from an external job opportunity source** accessible through: [jobberwocky-extra-source](http://localhost:8080/jobs). _(The port and url of external service may vary depending on configuration settings)_
 
-_(The port and url of external service may vary depending on configuration settings)_
+----- **EXAMPLES** -----
+
+URL: [http://localhost:3005/job/all?name=jr java developer](http://localhost:3005/job/all?name=jr%20java%20developer)
+
+LOCAL JOBS:
+
+```json
+[
+  {
+    "name": "Jr Java Developer",
+    "salary": 6000,
+    "country": "Brasil",
+    "skills": ["java", "android"]
+  },
+  {
+    "name": "Node Senior Developer",
+    "salary": 15000,
+    "country": "Spain",
+    "skills": ["node"]
+  }
+]
+```
+
+RESPONSE:
+
+```json
+[
+  {
+    "name": "Jr Java Developer",
+    "salary": 6000,
+    "country": "Brasil",
+    "skills": ["java", "android"],
+    "source": "local",
+    "externalRelated": {
+      "salary": 24000,
+      "country": "Argentina",
+      "skills": ["Java", "OOP"]
+    }
+  }
+]
+```
+
+---
+
+URL: [http://localhost:3005/job/all?name=java&origin=external](http://localhost:3005/job/all?name=java&origin=external)
+
+RESPONSE:
+
+```json
+[
+  {
+    "name": "Jr PHP Developer",
+    "salary": 24000,
+    "country": "Spain",
+    "skills": ["PHP", "OOP"],
+    "source": "external"
+  },
+  {
+    "name": "SSr PHP Developer",
+    "salary": 34000,
+    "country": "Spain",
+    "skills": ["PHP", "OOP", "Design Patterns"],
+    "source": "external"
+  }
+]
+```
