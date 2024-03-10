@@ -1,4 +1,5 @@
 **/.env
 **/node_modules
+**/coverage
 /components/jobs/data.csv
 /components/subscriptions/data.csv

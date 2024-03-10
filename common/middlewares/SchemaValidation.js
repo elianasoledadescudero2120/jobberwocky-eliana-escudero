@@ -1,11 +1,14 @@
 import ajv from 'ajv';
+import config from '../../config.js';
 const Ajv = ajv.default;
+
+const { errorMessages } = config;
 
 const SchemaValidation = {
 
   verify: (schema) => {
     if (!schema) {
-      throw new Error('Schema not provided');
+      throw new Error(errorMessages.schemaNotProvided);
     }
 
     return (req, res, next) => {

@@ -8,10 +8,11 @@ Additionally, the following libraries were used:
 - **json-2-csv**: to convert json to csv format, and viceversa.
 - **dotenv**: to load environment variables from a .env file into process.env
 - **nodemon**: automatically restars the application when file changes in the directory are detected.
+- **jest**: for testing purposes.
 
 ## Instalation and setup
 
-Please use node v18.0 or higher
+I recommend using node v18
 
 - `git clone https://github.com/elianasoledadescudero2120/jobberwocky-eliana-escudero.git`
 - `cd jobberwocky-eliana-escudero`
@@ -46,7 +47,7 @@ A job is made up of the following all required fields:
 - **country** (string)
 - **skills** (array of strings)
 
-Our API exposes the following methods to work with jobs:
+This API exposes the following methods to work with jobs:
 
 #### A. ALL (GET)
 
@@ -65,7 +66,7 @@ Accepts the following query parameters:
 
 Offers a list of jobs, filtered by query parameters. The name acts as a key and its unique.
 
-In addition our job-searching service **consumes data from an external job opportunity source** accessible through: [jobberwocky-extra-source](http://localhost:8080/jobs). _(The port and url of external service may vary depending on configuration settings)_
+In addition the job-searching service **consumes data from an external job opportunity source** accessible through: [jobberwocky-extra-source](http://localhost:8080/jobs). _(The port and url of external service may vary depending on configuration settings)_
 
 ----- **EXAMPLES** -----
 
@@ -203,7 +204,7 @@ A subscription is made up of the following required fields (only email is requir
 - **country** (string)
 - **skills** (array of strings)
 
-Our API exposes the following methods to work with subscriptions:
+This API exposes the following methods to work with subscriptions:
 
 #### A. ALL (GET)
 
@@ -292,3 +293,21 @@ Accessible through [http://localhost:3002/subscription/deleteAll](http://localho
 Deletes all subscriptions stored in the application.
 
 If deletion is successful it returns an empty set.
+
+## Testing
+
+This application includes tests for the most important files, the ones that define the core logic. The jest library was used for this purpose.
+
+To run the tests please enter the following command:
+
+- `npm run server`
+
+To get the coverage report, use this command:
+
+- `npm test -- --coverage`
+
+---
+
+## ¡ THANK YOU FOR YOUR INTEREST !
+
+I am available for any questions, observations or suggestions for improvement.
