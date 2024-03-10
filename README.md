@@ -47,7 +47,7 @@ A job is made up of the following all required fields:
 
 Our API exposes the following methods to work with jobs:
 
-#### ALL (GET)
+#### A. ALL (GET)
 
 Accessible through [http://localhost:3002/job/all](http://localhost:3002/job/all)
 
@@ -68,9 +68,9 @@ In addition our job-searching service **consumes data from an external job oppor
 
 ----- **EXAMPLES** -----
 
-URL: [http://localhost:3005/job/all?name=jr java developer](http://localhost:3005/job/all?name=jr%20java%20developer)
+**Url**: [http://localhost:3005/job/all?name=jr java developer](http://localhost:3005/job/all?name=jr%20java%20developer)
 
-LOCAL JOBS:
+**Local jobs**:
 
 ```json
 [
@@ -89,7 +89,7 @@ LOCAL JOBS:
 ]
 ```
 
-RESPONSE:
+**Response**:
 
 ```json
 [
@@ -110,9 +110,9 @@ RESPONSE:
 
 ---
 
-URL: [http://localhost:3005/job/all?name=java&origin=external](http://localhost:3005/job/all?name=java&origin=external)
+**Url**: [http://localhost:3005/job/all?name=java&origin=external](http://localhost:3005/job/all?name=java&origin=external)
 
-RESPONSE:
+**Response**:
 
 ```json
 [
@@ -132,3 +132,60 @@ RESPONSE:
   }
 ]
 ```
+
+#### B. FIND (GET)
+
+Accessible through [http://localhost:3002/job/find](http://localhost:3002/job/find)
+
+Accepts the same query parameters as ALL method. Works exactly like it, but returns the first job of the resulting set.
+
+#### C. CREATE (POST)
+
+Accessible through [http://localhost:3002/job/create](http://localhost:3002/job/create)
+
+Expects the body to contain (all required fields):
+
+- name
+- salary
+- country
+- skills ------------ (value: string with skills comma separated)
+
+After creating the job successfully, **it looks up for possible subscriptions matching the job. Retrieves and console the set of emails of that subscriptions**.
+_Email sending was not implemented, but a file is included for that purpose._
+
+If creation is successful it returns the job created.
+
+#### D. UPDATE (POST)
+
+Accessible through [http://localhost:3002/job/update](http://localhost:3002/job/update)
+
+Expects the body to contain (only name is required):
+
+- name
+- salary
+- country
+- skills ------------ (value: string with skills comma separated)
+
+If a job with the name entered is not found, a new one is created. This action requires the user to enter the country, skills and salary.
+
+If update is successful it returns the job updated.
+
+#### E. DELETE (POST)
+
+Accessible through [http://localhost:3002/job/delete](http://localhost:3002/job/delete)
+
+Expects the body to contain (all required):
+
+- name
+
+Deletes the job stored in application with name equal to name parameter.
+
+If deletion is successful it returns the job deleted.
+
+#### F. DELETEALL (POST)
+
+Accessible through [http://localhost:3002/job/deleteAll](http://localhost:3002/job/deleteAll)
+
+Deletes all jobs stored in the application.
+
+If deletion is successful it returns an empty set.
