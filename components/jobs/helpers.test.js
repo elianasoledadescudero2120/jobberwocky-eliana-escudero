@@ -1,15 +1,9 @@
-import { orderByIntegerValue, orderByStringValue, parseToWorkWith } from '../../common/helpers/data-helpers.js';
 import * as fileHelpers from '../../common/helpers/file-helpers.js';
-import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers';
 import config from '../../config.js';
+import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers';
+import { getLocalJob } from '../../common/helpers/test-helpers.js';
+import { orderByIntegerValue, orderByStringValue, parseToWorkWith } from '../../common/helpers/data-helpers.js';
 const { errorMessages } = config;
-
-const getJob = (index) => ({
-    name: `name${index}`,
-    country: `country${index}`,
-    salary: index,
-    skills: `node${index},java${index}`,
-});
 
 const csv = "somecsv";
 const jobs = [
@@ -107,7 +101,7 @@ describe('orderJobs', () => {
     test('It should apply order ok', async () => {
         
     
-        const testJobs = parseToWorkWith([getJob(1), getJob(2), getJob(3), getJob(4)]);
+        const testJobs = [getLocalJob(1), getLocalJob(2), getLocalJob(3), getLocalJob(4)];
         const orderOne = { order_by: 'name' };
         expect(orderJobs(testJobs, orderOne)).toStrictEqual(orderByStringValue(testJobs, 'name', 'ASC'));
 
@@ -124,8 +118,8 @@ describe('orderJobs', () => {
 
 describe('joinJobs', () => {
     test('It should join jobs as expected', async () => {
-        const localJobs = parseToWorkWith([getJob(1), getJob(2)]);
-        const externalJobs = parseToWorkWith([{...getJob(3), name: 'name1'}, getJob(4)]);
+        const localJobs = [getLocalJob(1), getLocalJob(2)];
+        const externalJobs = [{...getLocalJob(3), name: 'name1'}, getLocalJob(4)];
 
         const expected = [
             { ...externalJobs[1], source: 'external' },

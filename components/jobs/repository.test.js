@@ -2,22 +2,9 @@ import * as helpers from "./helpers";
 import * as subscriptionHelpers from "../subscriptions/helpers";
 import config from "../../config";
 import { createJob, deleteAllJobs, deleteJob, findJob, getAllJobs, updateJob } from "./repository";
+import { getLocalJob, getExternalJob } from "../../common/helpers/test-helpers";
 
 const { errorMessages } = config;
-
-const getLocalJob = (index) => ({
-    name: `name${index}`,
-    country: `country${index}`,
-    salary: 100-index,
-    skills: [`node${index}`,`java${index}`],
-});
-
-const getExternalJob = (index) => ([
-    `name${index}`,
-    100-index,
-    `country${index}`,
-    [`node${index}`,`java${index}`]
-]);
 
 helpers.retrieveJobs = jest.fn().mockReturnValue([
     getLocalJob(4), getLocalJob(1), getLocalJob(2)

@@ -1,5 +1,5 @@
 import config from '../../config.js';
-import { allEmpty, isEmpty } from '../../common/helpers/data-helpers.js';
+import { allEmpty, isEmpty, orderByStringValue } from '../../common/helpers/data-helpers.js';
 import { filterSubscription, filterSubscriptionForJob, retrieveSubscriptions, saveSubscriptions } from './helpers.js';
 
 const { errorMessages } = config;
@@ -7,7 +7,8 @@ const { errorMessages } = config;
 export const getAllSubscriptions = async ({ query: filters = '' }) => {
   
   const subscriptions = await retrieveSubscriptions();
-  return { data: subscriptions.filter(sub => filterSubscription(sub, filters))};
+  const filteredSubscriptions = subscriptions.filter(sub => filterSubscription(sub, filters));
+  return { data: orderByStringValue(filteredSubscriptions, 'email')};
 }
 
 export const getAllSubscriptionsMatchingJob = async (jobData) => {
@@ -21,7 +22,8 @@ export const findSubscription = async ({ query: filters = {} }) => {
   }
 
   const subscriptions = await retrieveSubscriptions();
-  const subscription = subscriptions.find(sub => filterSubscription(sub, filters)) || {};
+  const orderedSubscriptions = orderByStringValue(subscriptions, 'email');
+  const subscription = orderedSubscriptions.find(sub => filterSubscription(sub, filters)) || {};
   return { data: subscription};
 }
 

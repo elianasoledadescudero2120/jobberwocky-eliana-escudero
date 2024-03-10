@@ -2,6 +2,7 @@ import { parseToWorkWith } from '../../common/helpers/data-helpers.js';
 import * as fileHelpers from '../../common/helpers/file-helpers.js';
 import { filterSubscription, filterSubscriptionForJob, retrieveSubscriptions, saveSubscriptions } from './helpers';
 import config from '../../config.js';
+import { getSubscription } from '../../common/helpers/test-helpers.js';
 const { errorMessages } = config;
 
 const csv = "somecsv";
@@ -71,34 +72,35 @@ describe('saveSubscriptions', () => {
 describe('filterSubscription', () => {
   test('It should apply filter ok', async () => {
     const filterOne = { name: 'job', salary: 1000 };
-    expect(filterSubscription(subscriptionsParsed[0], filterOne)).toBe(true);
+    const subscription = getSubscription(1);
+    expect(filterSubscription(subscription, filterOne)).toBe(true);
 
     const filterTwo = { name: 'job', salary: 500 };
-    expect(filterSubscription(subscriptionsParsed[0], filterTwo)).toBe(false);
+    expect(filterSubscription(subscription, filterTwo)).toBe(false);
 
-    const filterThree = { name: 'job', salary: 1000, skills:'java,node' };
-    expect(filterSubscription(subscriptionsParsed[0], filterThree)).toBe(true);
+    const filterThree = { name: 'job', salary: 1000, skills:'java1,node1' };
+    expect(filterSubscription(subscription, filterThree)).toBe(true);
 
-    const filterFour = { name: 'job', salary: 1000, skills:'java,node,phyton' };
-    expect(filterSubscription(subscriptionsParsed[0], filterFour)).toBe(false);
+    const filterFour = { name: 'job', salary: 1000, skills:'java1,node1,phyton' };
+    expect(filterSubscription(subscription, filterFour)).toBe(false);
 
-    const filterFive = { name: 'job', salary_min: 1000, country:'jobCountry' };
-    expect(filterSubscription(subscriptionsParsed[0], filterFive)).toBe(true);
+    const filterFive = { name: 'job', salary_min: 1000, country:'jobCountry1' };
+    expect(filterSubscription(subscription, filterFive)).toBe(true);
 
     const filterSix = { name: 'job', salary_min: 1000, country:'Armenia' };
-    expect(filterSubscription(subscriptionsParsed[0], filterSix)).toBe(false);
+    expect(filterSubscription(subscription, filterSix)).toBe(false);
 
     const filterSeven = { name: 'NaMe'};
-    expect(filterSubscription(subscriptionsParsed[0], filterSeven)).toBe(true);
+    expect(filterSubscription(subscription, filterSeven)).toBe(true);
 
     const filterEight = { name: 'other'};
-    expect(filterSubscription(subscriptionsParsed[0], filterEight)).toBe(false);
+    expect(filterSubscription(subscription, filterEight)).toBe(false);
 
     const filterNine = { email: 'someemail@gmail.com'};
-    expect(filterSubscription(subscriptionsParsed[0], filterNine)).toBe(true);
+    expect(filterSubscription(subscription, filterNine)).toBe(true);
 
     const filterTen = { name: 'other@gmail.com'};
-    expect(filterSubscription(subscriptionsParsed[0], filterTen)).toBe(false);
+    expect(filterSubscription(subscription, filterTen)).toBe(false);
   });
 });
 

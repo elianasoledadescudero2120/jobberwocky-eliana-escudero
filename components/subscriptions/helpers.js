@@ -48,8 +48,8 @@ export const filterSubscriptionForJob = (sub, job) => {
     const jobSkills = jobData.skills.map(skill => skill.toLowerCase())
     const subSkills = sub.skills.map(skill => skill.toLowerCase());
     
-    return (isEmpty(sub.name) || jobData.name.toLowerCase().includes(sub.name.toLowerCase()))
-        && (isEmpty(sub.country) || jobData.country.toLowerCase() === sub.country.toLowerCase())
-        && (isEmpty(subSkills) || subSkills.some(s => jobSkills.includes(s)))
-        && (isEmpty(sub.salary_min) || sub.salary_min <= jobData.salary)
+    return (isEmpty(sub.name) || isEmpty(jobData.name) || jobData.name.toLowerCase().includes(sub.name.toLowerCase()))
+        && (isEmpty(sub.country) || isEmpty(jobData.country) || jobData.country.toLowerCase() === sub.country.toLowerCase())
+        && (isEmpty(subSkills) || isEmpty(jobSkills) || subSkills.some(s => jobSkills.includes(s)))
+        && (isEmpty(sub.salary_min) || isEmpty(jobData.salary) || sub.salary_min <= jobData.salary)
 }

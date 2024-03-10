@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from "cors";
 import config from "./config.js";
 import dotenv from 'dotenv';
 import JobsRoutes from "./components/jobs/routes.js";
@@ -10,7 +9,6 @@ const PORT = process.env.PORT || config.port;
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
 app.use(express.json());
 
 app.use("/job", JobsRoutes);
