@@ -11,6 +11,7 @@ const config = {
     repeatedSubscription: 'A subscription is already stored with the same email. Please provide another one.',
     saveJob: 'Error while saving the job. Please try again.',
     saveSubscription: 'Error while saving the subscription. Please try again.',
+    serverError: 'Server error. Possible invalid route.',
     updateJobValuesMissing: 'There isnt a job with the name provided. To create a new one please provide the salary, country and skills',
   },
   externalJobsSource: 'http://localhost:8080/jobs',
