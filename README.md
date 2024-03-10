@@ -18,7 +18,7 @@ I recommend using node v18
 - `cd jobberwocky-eliana-escudero`
 - `npm install`
 
-Create a file .env in root directory to store basic configuration (ask admin about suggested content).
+I suggest creating a .env file in root directory to store basic configuration (ask me about content), but its not mandatory.
 
 - `npm run server`
 
