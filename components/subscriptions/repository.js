@@ -18,7 +18,7 @@ export const getAllSubscriptionsMatchingJob = async (jobData) => {
 
 export const findSubscription = async ({ query: filters = {} }) => {
   if(allEmpty(filters, ['name', 'email', 'country', 'skills'])) {
-    throw { message: errorMessages.filterSubscriptionValueMissing};
+    throw { message: errorMessages.filterSubscriptionValuesMissing};
   }
 
   const subscriptions = await retrieveSubscriptions();

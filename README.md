@@ -68,7 +68,7 @@ In addition our job-searching service **consumes data from an external job oppor
 
 ----- **EXAMPLES** -----
 
-**Url**: [http://localhost:3005/job/all?name=jr java developer](http://localhost:3005/job/all?name=jr%20java%20developer)
+**Url**: [http://localhost:3002/job/all?name=jr java developer](http://localhost:3002/job/all?name=jr%20java%20developer)
 
 **Local jobs**:
 
@@ -110,7 +110,7 @@ In addition our job-searching service **consumes data from an external job oppor
 
 ---
 
-**Url**: [http://localhost:3005/job/all?name=java&origin=external](http://localhost:3005/job/all?name=java&origin=external)
+**Url**: [http://localhost:3002/job/all?name=java&origin=external](http://localhost:3002/job/all?name=java&origin=external)
 
 **Response**:
 
@@ -137,7 +137,7 @@ In addition our job-searching service **consumes data from an external job oppor
 
 Accessible through [http://localhost:3002/job/find](http://localhost:3002/job/find)
 
-Accepts the same query parameters as ALL method. Works exactly like it, but returns the first job of the resulting set.
+Accepts the same query parameters as ALL method (**requires at least one of them**). Works exactly like it, but returns the first job of the resulting set.
 
 #### C. CREATE (POST)
 
@@ -187,5 +187,107 @@ If deletion is successful it returns the job deleted.
 Accessible through [http://localhost:3002/job/deleteAll](http://localhost:3002/job/deleteAll)
 
 Deletes all jobs stored in the application.
+
+If deletion is successful it returns an empty set.
+
+---
+
+### 2. SUBSCRIPTIONS
+
+A subscription is made up of the following required fields (only email is required):
+
+- **email** (string)
+- **name** (string)
+- **salary_min** (integer)
+- **country** (string)
+- **skills** (array of strings)
+
+Our API exposes the following methods to work with subscriptions:
+
+#### A. ALL (GET)
+
+Accessible through [http://localhost:3002/subscription/all](http://localhost:3002/subscription/all)
+
+Accepts the following query parameters:
+
+- email
+- name
+- salary ------------ (filter logic: subscription.salary_min <= salary)
+- country
+- skills ------------ (value: string with skills comma separated)
+
+Offers a list of subscriptions, filtered by query parameters. The email acts as a key and its unique.
+
+----- **EXAMPLE** -----
+
+**Url**: [http://localhost:3002/subscription/all](http://localhost:3002/subscription/all)
+
+**Response**:
+
+```json
+[
+  {
+    "email": "federico@gmail.com",
+    "name": "Developer",
+    "salary_min": 6000,
+    "country": "Argentina",
+    "skills": ["node"]
+  }
+]
+```
+
+#### B. FIND (GET)
+
+Accessible through [http://localhost:3002/subscription/find](http://localhost:3002/subscription/find)
+
+Accepts the same query parameters as ALL method (**requires at least one of them**). Works exactly like it, but returns the first subscription of the resulting set.
+
+#### C. CREATE (POST)
+
+Accessible through [http://localhost:3002/subscription/create](http://localhost:3002/subscription/create)
+
+Expects the body to contain (only email is required):
+
+- email
+- name
+- salary_min
+- country
+- skills ------------ (value: string with skills comma separated)
+
+If creation is successful it returns the subscription created.
+
+#### D. UPDATE (POST)
+
+Accessible through [http://localhost:3002/subscription/update](http://localhost:3002/subscription/update)
+
+Expects the body to contain (only email is required):
+
+- email
+- name
+- salary_min
+- country
+- skills ------------ (value: string with skills comma separated)
+
+If a subscription with the email entered is not found, a new one is created.
+
+If update is successful it returns the subscription updated.
+
+#### E. DELETE (POST)
+
+Accessible through [http://localhost:3002/subscription/delete](http://localhost:3002/subscription/delete)
+
+Expects the body to contain (all required):
+
+- email
+
+Deletes the subscription stored in application with email equal to email parameter.
+
+If deletion is successful it returns the subscription deleted.
+
+#### F. DELETEALL (POST)
+
+Accessible through [http://localhost:3002/subscription/deleteAll](http://localhost:3002/subscription/deleteAll)
+
+Deletes all subscriptions stored in the application.
 
 If deletion is successful it returns an empty set.
