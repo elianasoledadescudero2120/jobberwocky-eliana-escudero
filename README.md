@@ -30,13 +30,13 @@ The following repository offers more information on this: [jobberwocky-extra-sou
 
 ## Description
 
-This API provides two endpoints: [JOBS](#jobs) and [SUBSCRIPTIONS](#2.-subscriptions).
+This API provides two endpoints: [JOBS](#1-jobs) and [SUBSCRIPTIONS](#2-subscriptions).
 
 All the API responses are JSON-formatted.
 
 All data is stored inside the application using .csv files. The path of the files can be modified through config.js
 
-### JOBS
+### 1 JOBS
 
 A job is made up of the following all required fields:
 
@@ -192,7 +192,7 @@ If deletion is successful it returns an empty set.
 
 ---
 
-### 2. SUBSCRIPTIONS
+### 2 SUBSCRIPTIONS
 
 A subscription is made up of the following required fields (only email is required):
 
