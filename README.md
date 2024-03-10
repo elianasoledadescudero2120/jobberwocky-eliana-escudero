@@ -68,6 +68,8 @@ Offers a list of jobs, filtered by query parameters. The name acts as a key and 
 
 In addition the job-searching service **consumes data from an external job opportunity source** accessible through: [jobberwocky-extra-source](http://localhost:8080/jobs). _(The port and url of external service may vary depending on configuration settings)_
 
+I assumed that in the list of external jobs returned, the name field also acts as a unique key.
+
 ----- **EXAMPLES** -----
 
 **Url**: [http://localhost:3002/job/all?name=jr java developer](http://localhost:3002/job/all?name=jr%20java%20developer)

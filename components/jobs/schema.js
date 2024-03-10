@@ -38,4 +38,5 @@ export const UpdateJobSchema = {
 export const DeleteJobSchema = {
   ...JobSchema,
   required: ["name"],
+  additionalProperties: true,
 };
