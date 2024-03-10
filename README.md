@@ -14,6 +14,7 @@ Additionally, the following libraries were used:
 Please use node v18.0 or higher
 
 - `git clone https://github.com/elianasoledadescudero2120/jobberwocky-eliana-escudero.git`
+- `cd jobberwocky-eliana-escudero`
 - `npm install`
 
 Create a file .env in root directory to store basic configuration (ask admin about suggested content).
