@@ -1,5 +1,4 @@
 const config = {
-  port: 3002,
   errorMessages: {
     corruptedData: 'Corrupted data! Please verify the storage state.',
     filterJobValuesMissing: 'Please provide at least one filter for the job. It could be name, salary, country and/or skills',
@@ -14,6 +13,8 @@ const config = {
     saveSubscription: 'Error while saving the subscription. Please try again.',
     updateJobValuesMissing: 'There isnt a job with the name provided. To create a new one please provide the salary, country and skills',
   },
+  externalJobsSource: 'http://localhost:8080/jobs',
+  port: 3002,
   storagePaths: {
     jobs: 'components/jobs/data.csv',
     subscriptions: 'components/subscriptions/data.csv',

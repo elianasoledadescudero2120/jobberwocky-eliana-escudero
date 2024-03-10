@@ -1,5 +1,9 @@
+import config from '../config.js';
+
+const { EXTERNAL_JOBS_SOURCE } = process.env;
+
 const getExternalJobs = async (filters = '') => {
-  let url = new URL(process.env.EXTERNAL_JOBS_SOURCE)
+  let url = EXTERNAL_JOBS_SOURCE ? new URL(EXTERNAL_JOBS_SOURCE) : new URL(config.externalJobsSource);
   url.search = new URLSearchParams(filters)
 
   const jobs = await fetch(url)
