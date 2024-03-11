@@ -198,11 +198,11 @@ If deletion is successful it returns an empty set.
 
 ### 2 SUBSCRIPTIONS
 
-A subscription is made up of the following required fields (only email is required):
+A subscription is made up of the following fields (only email is required):
 
 - **email** (string) (UNIQUE KEY)
 - **name** (string)
-- **salary_min** (integer)
+- **salary_min** (number)
 - **country** (string)
 - **skills** (array of strings)
 
