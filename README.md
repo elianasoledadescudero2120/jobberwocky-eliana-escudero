@@ -42,8 +42,8 @@ All data is stored inside the application using .csv files. The path of the file
 
 A job is made up of the following all required fields:
 
-- **name** (string)
-- **salary** (integer)
+- **name** (string) (UNIQUE KEY)
+- **salary** (number)
 - **country** (string)
 - **skills** (array of strings)
 
@@ -60,7 +60,7 @@ Accepts the following query parameters:
 - salary_max
 - country
 - skills ------------ (value: string with skills comma separated)
-- order_by ---------- (possible values: [name, salary, country, skills])
+- order_by ---------- (possible values: [name, salary, country])
 - order_direction --- (possible values: 'ASC', 'DESC')
 - origin ------------ (possible values: [local, external])
 
@@ -114,7 +114,7 @@ I assumed that in the list of external jobs returned, the name field also acts a
 
 ---
 
-**Url**: [http://localhost:3002/job/all?name=java&origin=external](http://localhost:3002/job/all?name=java&origin=external)
+**Url**: [http://localhost:3002/job/all?name=php&origin=external](http://localhost:3002/job/all?name=php&origin=external)
 
 **Response**:
 
@@ -200,7 +200,7 @@ If deletion is successful it returns an empty set.
 
 A subscription is made up of the following required fields (only email is required):
 
-- **email** (string)
+- **email** (string) (UNIQUE KEY)
 - **name** (string)
 - **salary_min** (integer)
 - **country** (string)
