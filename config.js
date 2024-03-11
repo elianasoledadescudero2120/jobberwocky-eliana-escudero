@@ -1,6 +1,7 @@
 const config = {
   errorMessages: {
     corruptedData: 'Corrupted data! Please verify the storage state.',
+    externalServerError: 'Error while connecting to the external server',
     filterJobValuesMissing: 'Please provide at least one filter for the job. It could be name, salary, country and/or skills',
     filterSubscriptionValuesMissing: 'Please provide at least one filter for the subscription. It could be emaiil, name, country and/or skills',
     missingJob: 'There isnt a job with the name provided.',

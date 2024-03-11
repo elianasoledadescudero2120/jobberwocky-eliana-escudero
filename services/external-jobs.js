@@ -18,9 +18,9 @@ const getExternalJobs = async (filters = '') => {
       skills: job[3] || [],
     }));
   })
-  .catch(err => {
-    console.log('-- ERROR --', err.message);
-    return {};
+  .catch(() => {
+    console.log('-- ERROR --', config.errorMessages.externalServerError);
+    return [];
   });
 
   return jobs;
