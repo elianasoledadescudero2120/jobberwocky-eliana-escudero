@@ -11,11 +11,11 @@ export const getAllJobs = async ({ query: filters = {} }) => {
   let external = [];
   let local = [];
 
-  if(isEmpty(filters.origin) || filters.origin === 'external'){
+  if(isEmpty(filters.source) || filters.source === 'external'){
     external = await getExternalJobs(filters);
   }
 
-  if(isEmpty(filters.origin) || filters.origin === 'local'){
+  if(isEmpty(filters.source) || filters.source === 'local'){
     const jobs = await retrieveJobs();
     local = jobs.filter(job => filterJob(job, filters));
   }
@@ -25,7 +25,7 @@ export const getAllJobs = async ({ query: filters = {} }) => {
 }
 
 export const findJob = async ({ query: filters = {} }) => {
-  if(allEmpty(filters, ['name', 'salary_min', 'salary_max', 'country', 'skills', 'order_by', 'origin', 'order_direction'])) {
+  if(allEmpty(filters, ['name', 'salary_min', 'salary_max', 'country', 'skills', 'order_by', 'source', 'order_direction'])) {
     throw { message: errorMessages.filterJobValuesMissing};
   }
 

@@ -30,7 +30,7 @@ global.fetch = jest.fn(() =>
 
 describe('getAllJobs', () => {
     test('It should return only local jobs if specified. They should be ordered by name.', async () => {
-        const testFilters = { origin: 'local'};
+        const testFilters = { source: 'local'};
         const expected = {
             data: [
                 { ...getLocalJob(1), source: 'local' },
@@ -44,7 +44,7 @@ describe('getAllJobs', () => {
     });
 
     test('It should return only external jobs if specified. They should be ordered by name.', async () => {
-        const testFilters = { origin: 'external'};
+        const testFilters = { source: 'external'};
         const expected = {
             data: [
                 { ...getLocalJob(4), source: 'external' }, //External job matches to local job after parsing inside external-jobs.js
@@ -56,7 +56,7 @@ describe('getAllJobs', () => {
         expect(jobs).toStrictEqual(expected);
     });
 
-    test('It should return joined jobs if no origin is specified. They should be ordered according to filter.', async () => {
+    test('It should return joined jobs if no source is specified. They should be ordered according to filter.', async () => {
         const testFilters = { order_by: 'salary'};
         const expected = {
             data: [
@@ -76,8 +76,8 @@ describe('getAllJobs', () => {
         expect(jobs).toStrictEqual(expected);
     });
 
-    test('It should return joined jobs if no origin is specified. They should be filtered according to filter.', async () => {
-        const testFilters = { country: 'country4', origin: 'local'};
+    test('It should return joined jobs if no source is specified. They should be filtered according to filter.', async () => {
+        const testFilters = { country: 'country4', source: 'local'};
         const expected = {
             data: [
                 { ...getLocalJob(4), source: 'local' },

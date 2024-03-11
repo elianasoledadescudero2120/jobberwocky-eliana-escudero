@@ -60,9 +60,9 @@ Accepts the following query parameters:
 - salary_max
 - country
 - skills ------------ (value: string with skills comma separated)
-- order_by ---------- (possible values: [name, salary, country])
-- order_direction --- (possible values: 'ASC', 'DESC')
-- origin ------------ (possible values: [local, external])
+- order_by ---------- (possible values: [name, salary, country]) _(name by default)_
+- order_direction --- (possible values: 'asc', 'desc') _(asc by default)_
+- source ------------ (possible values: [local, external]) _(local + external by default)_
 
 Offers a list of jobs, filtered by query parameters. The name acts as a key and its unique.
 
@@ -114,7 +114,7 @@ I assumed that in the list of external jobs returned, the name field also acts a
 
 ---
 
-**Url**: [http://localhost:3002/job/all?name=php&origin=external](http://localhost:3002/job/all?name=php&origin=external)
+**Url**: [http://localhost:3002/job/all?name=php&source=external](http://localhost:3002/job/all?name=php&source=external)
 
 **Response**:
 

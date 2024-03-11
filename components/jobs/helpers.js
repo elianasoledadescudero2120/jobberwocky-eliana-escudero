@@ -44,7 +44,7 @@ export const filterJob = (job, reqFilters) => {
         && (filters.skills === undefined || filterSkills.every(s => jobSkills.includes(s)))
 }
 
-export const orderJobs = (jobs, { order_by, order_direction = 'ASC' }) => {
+export const orderJobs = (jobs, { order_by, order_direction = 'asc' }) => {
     if(isEmpty(order_by) || order_by === 'name') return orderByStringValue(jobs, 'name', order_direction);
     if(order_by === 'salary') return orderByIntegerValue(jobs, 'salary', order_direction);
     if(order_by === 'country') return orderByStringValue(jobs, 'country', order_direction);

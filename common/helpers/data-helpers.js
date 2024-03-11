@@ -37,13 +37,13 @@ export const parseToSave = data => {
   }))
 }
 
-export const orderByStringValue = (items, key, direction = 'ASC') => {
-  if(direction === 'ASC') return items.sort((a, b) => a[key].toLowerCase().localeCompare(b[key].toLowerCase()));
+export const orderByStringValue = (items, key, direction = 'asc') => {
+  if(direction.toLowerCase() === 'asc') return items.sort((a, b) => a[key].toLowerCase().localeCompare(b[key].toLowerCase()));
   else return items.sort((a, b) => b[key].toLowerCase().localeCompare(a[key].toLowerCase()));
 }
 
-export const orderByIntegerValue = (items, key, direction = 'ASC') => {
-  if(direction === 'ASC') return items.sort((a, b) => a[key] - b[key]);
+export const orderByIntegerValue = (items, key, direction = 'asc') => {
+  if(direction.toLowerCase() === 'asc') return items.sort((a, b) => a[key] - b[key]);
   else return items.sort((a, b) => b[key] - a[key]);
 }
 

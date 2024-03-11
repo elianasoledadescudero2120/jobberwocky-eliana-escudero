@@ -103,16 +103,16 @@ describe('orderJobs', () => {
     
         const testJobs = [getLocalJob(1), getLocalJob(2), getLocalJob(3), getLocalJob(4)];
         const orderOne = { order_by: 'name' };
-        expect(orderJobs(testJobs, orderOne)).toStrictEqual(orderByStringValue(testJobs, 'name', 'ASC'));
+        expect(orderJobs(testJobs, orderOne)).toStrictEqual(orderByStringValue(testJobs, 'name', 'asc'));
 
-        const orderTwo = { order_by: 'name', order_direction: 'DESC' };
-        expect(orderJobs(testJobs, orderTwo)).toStrictEqual(orderByStringValue(testJobs, 'name', 'DESC'));
+        const orderTwo = { order_by: 'name', order_direction: 'desc' };
+        expect(orderJobs(testJobs, orderTwo)).toStrictEqual(orderByStringValue(testJobs, 'name', 'desc'));
 
         const orderThree = { order_by: 'salary' };
-        expect(orderJobs(testJobs, orderThree)).toStrictEqual(orderByIntegerValue(testJobs, 'salary', 'ASC'));
+        expect(orderJobs(testJobs, orderThree)).toStrictEqual(orderByIntegerValue(testJobs, 'salary', 'asc'));
 
         const orderFour = {};
-        expect(orderJobs(testJobs, orderFour)).toStrictEqual(orderByStringValue(testJobs, 'name', 'ASC'));
+        expect(orderJobs(testJobs, orderFour)).toStrictEqual(orderByStringValue(testJobs, 'name', 'asc'));
     });
 });
 
