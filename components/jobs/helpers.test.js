@@ -1,9 +1,7 @@
 import * as fileHelpers from '../../common/helpers/file-helpers.js';
-import config from '../../config.js';
 import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers';
-import { getLocalJob } from '../../common/helpers/test-helpers.js';
+import { expectNotError, expectToCatchError, getLocalJob } from '../../common/helpers/test-helpers.js';
 import { orderByIntegerValue, orderByStringValue, parseToWorkWith } from '../../common/helpers/data-helpers.js';
-const { errorMessages } = config;
 
 const csv = "somecsv";
 const jobs = [
@@ -35,84 +33,60 @@ describe('retrieveJobs', () => {
 
   test('It should throw error when read file failed', async () => {
     jest.spyOn(fileHelpers, "readFile").mockRejectedValue(new Error());
-
-    const errorCatch = jest.fn();
-    await retrieveJobs().catch(errorCatch);
-    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.readJobs}); 
+    expectToCatchError(retrieveJobs, 'readJobs', null);
   });
 
   test('It should throw error when data is not valid according to schema', async () => {
     jest.spyOn(fileHelpers, "readFile").mockResolvedValue('someValue');
     mockCsvToJson = jest.fn();
-
-    const errorCatch = jest.fn();
-    await retrieveJobs().catch(errorCatch);
-    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.corruptedData}); 
+    expectToCatchError(retrieveJobs, 'corruptedData', null);
   });
 });
 
 describe('saveJobs', () => {
     test('It should work ok if no errors with parsing and saving', async () => {
       jest.spyOn(fileHelpers, "writeFile").mockResolvedValue('someValue');
-      
-      const errorCatch = jest.fn();
-      await saveJobs(jobs).catch(errorCatch);
-      expect(errorCatch).not.toHaveBeenCalled(); 
+      expectNotError(saveJobs, jobs);
     });
 
     test('It should throw error if writing to file fails', async () => {
-        jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
-        
-        const errorCatch = jest.fn();
-        await saveJobs(jobs).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.saveJob}); 
+      jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
+      expectToCatchError(saveJobs, 'saveJob', jobs);
     });
 });
 
 describe('filterJob', () => {
     test('It should apply filter ok', async () => {
-      const filterOne = { name: 'job', salary_min: 1000 };
-      expect(filterJob(jobsParsed[0], filterOne)).toBe(true);
+      const testCases = [
+        [{ name: 'job', salary_min: 1000 }, true],
+        [{ name: 'job', salary_min: 2000 }, false],
+        [{ name: 'job', salary_min: 1000, skills:'java,node' }, true],
+        [{ name: 'job', salary_min: 1000, skills:'java,node,phyton' }, false],
+        [{ name: 'job', salary_min: 1000, country:'jobCountry' }, true],
+        [{ name: 'job', salary_min: 1000, country:'Armenia' }, false],
+        [{ name: 'NaMe'}, true],
+        [{ name: 'other'}, false],
+      ];
 
-      const filterTwo = { name: 'job', salary_min: 2000 };
-      expect(filterJob(jobsParsed[0], filterTwo)).toBe(false);
-
-      const filterThree = { name: 'job', salary_min: 1000, skills:'java,node' };
-      expect(filterJob(jobsParsed[0], filterThree)).toBe(true);
-
-      const filterFour = { name: 'job', salary_min: 1000, skills:'java,node,phyton' };
-      expect(filterJob(jobsParsed[0], filterFour)).toBe(false);
-
-      const filterFive = { name: 'job', salary_min: 1000, country:'jobCountry' };
-      expect(filterJob(jobsParsed[0], filterFive)).toBe(true);
-
-      const filterSix = { name: 'job', salary_min: 1000, country:'Armenia' };
-      expect(filterJob(jobsParsed[0], filterSix)).toBe(false);
-
-      const filterSeven = { name: 'NaMe'};
-      expect(filterJob(jobsParsed[0], filterSeven)).toBe(true);
-
-      const filterEight = { name: 'other'};
-      expect(filterJob(jobsParsed[0], filterEight)).toBe(false);
+      testCases.forEach(([filter, response]) =>
+        expect(filterJob(jobsParsed[0], filter)).toBe(response)
+      );
     });
 });
 
 describe('orderJobs', () => {
     test('It should apply order ok', async () => {
-        
-    
         const testJobs = [getLocalJob(1), getLocalJob(2), getLocalJob(3), getLocalJob(4)];
-        const orderOne = { order_by: 'name' };
-        expect(orderJobs(testJobs, orderOne)).toStrictEqual(orderByStringValue(testJobs, 'name', 'asc'));
+        const testCases = [
+          [{ order_by: 'name' }, orderByStringValue(testJobs, 'name', 'asc')],
+          [{ order_by: 'name', order_direction: 'desc' }, orderByStringValue(testJobs, 'name', 'desc')],
+          [{ order_by: 'salary' }, orderByIntegerValue(testJobs, 'salary', 'asc')],
+          [{}, orderByStringValue(testJobs, 'name', 'asc')],
+        ];
 
-        const orderTwo = { order_by: 'name', order_direction: 'desc' };
-        expect(orderJobs(testJobs, orderTwo)).toStrictEqual(orderByStringValue(testJobs, 'name', 'desc'));
-
-        const orderThree = { order_by: 'salary' };
-        expect(orderJobs(testJobs, orderThree)).toStrictEqual(orderByIntegerValue(testJobs, 'salary', 'asc'));
-
-        const orderFour = {};
-        expect(orderJobs(testJobs, orderFour)).toStrictEqual(orderByStringValue(testJobs, 'name', 'asc'));
+        testCases.forEach(([order, response]) =>
+          expect(orderJobs(testJobs, order)).toBe(response)
+        );
     });
 });
 

@@ -1,9 +1,7 @@
 import { parseToWorkWith } from '../../common/helpers/data-helpers.js';
 import * as fileHelpers from '../../common/helpers/file-helpers.js';
 import { filterSubscription, filterSubscriptionForJob, retrieveSubscriptions, saveSubscriptions } from './helpers';
-import config from '../../config.js';
-import { getSubscription } from '../../common/helpers/test-helpers.js';
-const { errorMessages } = config;
+import { expectNotError, expectToCatchError, getSubscription } from '../../common/helpers/test-helpers.js';
 
 const csv = "somecsv";
 const subscriptions = [
@@ -35,104 +33,67 @@ describe('retrieveSubscriptions', () => {
 
   test('It should throw error when read file failed', async () => {
     jest.spyOn(fileHelpers, "readFile").mockRejectedValue(new Error());
-
-    const errorCatch = jest.fn();
-    await retrieveSubscriptions().catch(errorCatch);
-    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.readSubscriptions}); 
+    expectToCatchError(retrieveSubscriptions, 'readSubscriptions', null);
   });
 
   test('It should throw error when data is not valid according to schema', async () => {
     jest.spyOn(fileHelpers, "readFile").mockResolvedValue('someValue');
     mockCsvToJson = jest.fn();
-
-    const errorCatch = jest.fn();
-    await retrieveSubscriptions().catch(errorCatch);
-    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.corruptedData}); 
+    expectToCatchError(retrieveSubscriptions, 'corruptedData', null);
   });
 });
 
 describe('saveSubscriptions', () => {
   test('It should work ok if no errors with parsing and saving', async () => {
     jest.spyOn(fileHelpers, "writeFile").mockResolvedValue('someValue');
-    
-    const errorCatch = jest.fn();
-    await saveSubscriptions(subscriptions).catch(errorCatch);
-    expect(errorCatch).not.toHaveBeenCalled(); 
+    expectNotError(saveSubscriptions, subscriptions);
   });
 
   test('It should throw error if writing to file fails', async () => {
       jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
-      
-      const errorCatch = jest.fn();
-      await saveSubscriptions(subscriptions).catch(errorCatch);
-      expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.saveSubscription}); 
+      expectToCatchError(saveSubscriptions, 'saveSubscription', subscriptions);
   });
 });
 
 describe('filterSubscription', () => {
   test('It should apply filter ok', async () => {
-    const filterOne = { name: 'job', salary: 1000 };
     const subscription = getSubscription(1);
-    expect(filterSubscription(subscription, filterOne)).toBe(true);
+    const testCases = [
+      [{ name: 'job', salary: 1000 }, true],
+      [{ name: 'job', salary: 500 }, false],
+      [{ name: 'job', salary: 1000, skills:'java1,node1' }, true],
+      [{ name: 'job', salary: 1000, skills:'java1,node1,phyton' }, false],
+      [{ name: 'job', salary_min: 1000, country:'jobCountry1' }, true],
+      [{ name: 'job', salary_min: 1000, country:'Armenia' }, false],
+      [{ name: 'NaMe'}, true],
+      [{ name: 'other'}, false],
+      [{ email: 'someemail@gmail.com'}, true],
+      [{ email: 'other@gmail.com'}, false],
+    ];
 
-    const filterTwo = { name: 'job', salary: 500 };
-    expect(filterSubscription(subscription, filterTwo)).toBe(false);
-
-    const filterThree = { name: 'job', salary: 1000, skills:'java1,node1' };
-    expect(filterSubscription(subscription, filterThree)).toBe(true);
-
-    const filterFour = { name: 'job', salary: 1000, skills:'java1,node1,phyton' };
-    expect(filterSubscription(subscription, filterFour)).toBe(false);
-
-    const filterFive = { name: 'job', salary_min: 1000, country:'jobCountry1' };
-    expect(filterSubscription(subscription, filterFive)).toBe(true);
-
-    const filterSix = { name: 'job', salary_min: 1000, country:'Armenia' };
-    expect(filterSubscription(subscription, filterSix)).toBe(false);
-
-    const filterSeven = { name: 'NaMe'};
-    expect(filterSubscription(subscription, filterSeven)).toBe(true);
-
-    const filterEight = { name: 'other'};
-    expect(filterSubscription(subscription, filterEight)).toBe(false);
-
-    const filterNine = { email: 'someemail@gmail.com'};
-    expect(filterSubscription(subscription, filterNine)).toBe(true);
-
-    const filterTen = { name: 'other@gmail.com'};
-    expect(filterSubscription(subscription, filterTen)).toBe(false);
+    testCases.forEach(([filter, response]) =>
+      expect(filterSubscription(subscription, filter)).toBe(response)
+    );
   });
 });
 
 describe('filterSubscriptionForJob', () => {
   test('It should apply filter ok', async () => {
     const job = { name: 'jobName', salary: 1000, country: 'JobCountry', skills: 'java,node' };
-  
-    const subOne = { salary_min: 1000, skills: [] };
-    expect(filterSubscriptionForJob(subOne, job)).toBe(true);
+    const testCases = [
+      [{ salary_min: 1000, skills: [] }, true],
+      [{ salary_min: 2000, skills: [] }, false],
+      [{ country: 'jObcoUntry', skills: [] }, true],
+      [{ country: 'Armenia', skills: [] }, false],
+      [{ name: 'naME', skills: [] }, true],
+      [{ name: 'java', skills: [] }, false],
+      [{ skills: ['java' ,'node'] }, true],
+      [{ skills: ['phyton'] }, false],
+      [{ skills: ['phyton', 'java'] }, true],
+    ];
 
-    const subTwo = { salary_min: 2000, skills: [] };
-    expect(filterSubscriptionForJob(subTwo, job)).toBe(false);
-
-    const subThree = { country: 'jObcoUntry', skills: [] };
-    expect(filterSubscriptionForJob(subThree, job)).toBe(true);
-
-    const subFour = { country: 'Armenia', skills: [] };
-    expect(filterSubscriptionForJob(subFour, job)).toBe(false);
-
-    const subFive = { name: 'naME', skills: [] };
-    expect(filterSubscriptionForJob(subFive, job)).toBe(true);
-
-    const subSix = { name: 'java', skills: [] };
-    expect(filterSubscriptionForJob(subSix, job)).toBe(false);
-
-    const subSeven = { skills: ['java' ,'node'] };
-    expect(filterSubscriptionForJob(subSeven, job)).toBe(true);
-
-    const subEight = { skills: ['phyton'] };
-    expect(filterSubscriptionForJob(subEight, job)).toBe(false);
-
-    const subNine = { skills: ['phyton', 'java'] };
-    expect(filterSubscriptionForJob(subNine, job)).toBe(true);
+    testCases.forEach(([subscription, response]) =>
+      expect(filterSubscriptionForJob(subscription, job)).toBe(response)
+    );
   });
 });

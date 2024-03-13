@@ -1,9 +1,6 @@
 import * as helpers from "./helpers";
-import config from "../../config";
 import { createSusbcription, deleteAllSubscriptions, deleteSubscription, findSubscription, getAllSubscriptions, getAllSubscriptionsMatchingJob, updateSubscription } from "./repository";
-import { getSubscription } from "../../common/helpers/test-helpers";
-
-const { errorMessages } = config;
+import { expectToCatchError, getSubscription } from "../../common/helpers/test-helpers";
 
 helpers.retrieveSubscriptions = jest.fn().mockReturnValue([
     getSubscription(4), getSubscription(1), getSubscription(2)
@@ -102,11 +99,8 @@ describe('getAllSubscriptions', () => {
     });
 
     test('It should reject if another subscription with the same email is already in storage', async () => {
-        const body = getSubscription(4);;
-
-        const errorCatch = jest.fn();
-        await createSusbcription({ body }).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.repeatedSubscription}); 
+        const body = getSubscription(4);
+        expectToCatchError(createSusbcription, 'repeatedSubscription', { body }); 
     });
   });
 
@@ -147,10 +141,7 @@ describe('getAllSubscriptions', () => {
 
     test('It should reject if subscription isnt found in storage', async () => {
         const body = getSubscription(7);
-
-        const errorCatch = jest.fn();
-        await deleteSubscription({ body }).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.missingSubscription}); 
+        expectToCatchError(deleteSubscription, 'missingSubscription', { body }); 
     });
   });
 

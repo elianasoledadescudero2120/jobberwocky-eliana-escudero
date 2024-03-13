@@ -1,3 +1,6 @@
+import config from '../../config.js';
+const { errorMessages } = config;
+
 export const getLocalJob = (index) => ({
     name: `name${index}`,
     country: `country${index}`,
@@ -19,3 +22,15 @@ export const getSubscription = (index) => ({
     salary_min: 1000-index,
     skills: [`node${index}`,`java${index}`],
 });
+
+export const expectToCatchError = async (functionToCall, errorMessage, parameters = null) => {
+    const errorCatch = jest.fn();
+    await functionToCall(parameters).catch(errorCatch);
+    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages[errorMessage]}); 
+}
+
+export const expectNotError = async (functionToCall, parameters = null) => {
+    const errorCatch = jest.fn();
+    await functionToCall(parameters).catch(errorCatch);
+    expect(errorCatch).not.toHaveBeenCalled(); 
+}

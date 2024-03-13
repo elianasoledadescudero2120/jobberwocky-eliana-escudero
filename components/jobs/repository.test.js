@@ -1,10 +1,7 @@
 import * as helpers from "./helpers";
 import * as subscriptionHelpers from "../subscriptions/helpers";
-import config from "../../config";
 import { createJob, deleteAllJobs, deleteJob, findJob, getAllJobs, updateJob } from "./repository";
-import { getLocalJob, getExternalJob } from "../../common/helpers/test-helpers";
-
-const { errorMessages } = config;
+import { getLocalJob, getExternalJob, expectToCatchError } from "../../common/helpers/test-helpers";
 
 helpers.retrieveJobs = jest.fn().mockReturnValue([
     getLocalJob(4), getLocalJob(1), getLocalJob(2)
@@ -116,10 +113,7 @@ describe('getAllJobs', () => {
     test('It should reject if another job with the same name is already in storage', async () => {
         jest.spyOn(console, 'log').mockImplementation(jest.fn());
         const body = getLocalJob(4);
-
-        const errorCatch = jest.fn();
-        await createJob({ body }).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.repeatedJob}); 
+        expectToCatchError(createJob, 'repeatedJob', { body });
     });
 
     test('It should log matching subscriptions for the job', async () => {
@@ -160,10 +154,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if missing fields and job is going to be created', async () => {
         const body = { name: 'name6', country: 'country6' };
-
-        const errorCatch = jest.fn();
-        await updateJob({ body }).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.updateJobValuesMissing}); 
+        expectToCatchError(updateJob, 'updateJobValuesMissing', { body });   
     });
   });
 
@@ -180,10 +171,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if job isnt found in storage', async () => {
         const body = getLocalJob(7);
-
-        const errorCatch = jest.fn();
-        await deleteJob({ body }).catch(errorCatch);
-        expect(errorCatch).toHaveBeenCalledWith({message: errorMessages.missingJob}); 
+        expectToCatchError(deleteJob, 'missingJob', { body });  
     });
   });
 
