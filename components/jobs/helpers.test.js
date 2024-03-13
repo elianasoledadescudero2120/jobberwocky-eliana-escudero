@@ -1,6 +1,6 @@
 import * as fileHelpers from '../../common/helpers/file-helpers.js';
 import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers';
-import { expectNotError, expectToCatchError, getLocalJob } from '../../common/helpers/test-helpers.js';
+import { expectNotError, expectError, getLocalJob } from '../../common/helpers/test-helpers.js';
 import { orderByIntegerValue, orderByStringValue, parseToWorkWith } from '../../common/helpers/data-helpers.js';
 
 const csv = "somecsv";
@@ -33,13 +33,13 @@ describe('retrieveJobs', () => {
 
   test('It should throw error when read file failed', async () => {
     jest.spyOn(fileHelpers, "readFile").mockRejectedValue(new Error());
-    expectToCatchError(retrieveJobs, 'readJobs', null);
+    expectError(retrieveJobs, 'readJobs', null);
   });
 
   test('It should throw error when data is not valid according to schema', async () => {
     jest.spyOn(fileHelpers, "readFile").mockResolvedValue('someValue');
     mockCsvToJson = jest.fn();
-    expectToCatchError(retrieveJobs, 'corruptedData', null);
+    expectError(retrieveJobs, 'corruptedData', null);
   });
 });
 
@@ -51,7 +51,7 @@ describe('saveJobs', () => {
 
     test('It should throw error if writing to file fails', async () => {
       jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
-      expectToCatchError(saveJobs, 'saveJob', jobs);
+      expectError(saveJobs, 'saveJob', jobs);
     });
 });
 

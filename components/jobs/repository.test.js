@@ -1,7 +1,7 @@
 import * as helpers from "./helpers";
 import * as subscriptionHelpers from "../subscriptions/helpers";
 import { createJob, deleteAllJobs, deleteJob, findJob, getAllJobs, updateJob } from "./repository";
-import { getLocalJob, getExternalJob, expectToCatchError } from "../../common/helpers/test-helpers";
+import { getLocalJob, getExternalJob, expectError } from "../../common/helpers/test-helpers";
 
 helpers.retrieveJobs = jest.fn().mockReturnValue([
     getLocalJob(4), getLocalJob(1), getLocalJob(2)
@@ -113,7 +113,7 @@ describe('getAllJobs', () => {
     test('It should reject if another job with the same name is already in storage', async () => {
         jest.spyOn(console, 'log').mockImplementation(jest.fn());
         const body = getLocalJob(4);
-        expectToCatchError(createJob, 'repeatedJob', { body });
+        expectError(createJob, 'repeatedJob', { body });
     });
 
     test('It should log matching subscriptions for the job', async () => {
@@ -154,7 +154,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if missing fields and job is going to be created', async () => {
         const body = { name: 'name6', country: 'country6' };
-        expectToCatchError(updateJob, 'updateJobValuesMissing', { body });   
+        expectError(updateJob, 'updateJobValuesMissing', { body });   
     });
   });
 
@@ -171,7 +171,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if job isnt found in storage', async () => {
         const body = getLocalJob(7);
-        expectToCatchError(deleteJob, 'missingJob', { body });  
+        expectError(deleteJob, 'missingJob', { body });  
     });
   });
 
