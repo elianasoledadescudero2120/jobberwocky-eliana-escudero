@@ -30,7 +30,7 @@ export const findJob = async ({ query: filters = {} }) => {
   }
 
   const allFilteredJobs = await getAllJobs({ query: filters });
-  return { data: allFilteredJobs.data[0] };
+  return { data: allFilteredJobs.data[0] || {} };
 }
 
 export const createJob = async ({ body }) => {
