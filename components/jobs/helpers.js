@@ -1,7 +1,7 @@
 import config from '../../config.js';
 import converter from 'json-2-csv';
-import { JobsSchema } from './schema.js';
-import { isEmpty, orderByIntegerValue, orderByStringValue, parseToWorkWith ,parseToSave } from "../../common/helpers/data-helpers.js";
+import { JobSchema, JobsSchema } from './schema.js';
+import { isEmpty, orderByIntegerValue, orderByStringValue, parseToWorkWith ,parseToSave, filterObject } from "../../common/helpers/data-helpers.js";
 import { isValidData } from '../../common/middlewares/SchemaValidation.js';;
 import { readFile, writeFile } from '../../common/helpers/file-helpers.js';
 
@@ -31,18 +31,7 @@ export const saveJobs = async (jobs) => {
     });
 }
 
-  
-export const filterJob = (job, reqFilters) => {
-    const filters = parseToWorkWith(reqFilters);
-    const filterSkills = filters.skills.map(skill => skill.toLowerCase())
-    const jobSkills = job.skills.map(skill => skill.toLowerCase());
-
-    return (filters.name === undefined || job.name.toLowerCase().includes(filters.name.toLowerCase()))
-        && (filters.salary_min === undefined || job.salary >= filters.salary_min)
-        && (filters.salary_max === undefined || job.salary <= filters.salary_max)
-        && (filters.country === undefined || job.country.toLowerCase() === filters.country.toLowerCase())
-        && (filters.skills === undefined || filterSkills.every(s => jobSkills.includes(s)))
-}
+export const filterJob = (job, filters) => filterObject(JobSchema, job, filters);
 
 export const orderJobs = (jobs, { order_by, order_direction = 'asc' }) => {
     if(isEmpty(order_by) || order_by === 'name') return orderByStringValue(jobs, 'name', order_direction);

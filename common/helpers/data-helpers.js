@@ -47,3 +47,35 @@ export const orderByIntegerValue = (items, key, direction = 'asc') => {
   else return items.sort((a, b) => b[key] - a[key]);
 }
 
+export const filterBy = (type, value, filter) => {
+  if(filter === undefined) return true;
+
+  const filterOptions = {
+    'stringEqual' : () => value.toLowerCase() === filter.toLowerCase(),
+    'stringIncludes': () => value.toLowerCase().includes(filter.toLowerCase()),
+    'lessThan': () => value <= filter,
+    'greaterThan': () => value >= filter,
+    'includesAll': () => {
+      const valueToLowerCase = value.map(item => item.toLowerCase());
+      const arrayFilter = !Array.isArray(filter) ? filter.split(',') : filter;
+      return arrayFilter.every(f => valueToLowerCase.includes(f.toLowerCase()));
+    },
+  }
+
+  const filterFunc = filterOptions[type];
+  return filterFunc ? filterFunc() : true; 
+}
+
+export const filterObject = (schema, object, filters) => {
+  let pass = true;
+
+  Object.keys(schema.properties).forEach(prop => {
+    const propFilters = schema.properties[prop].filters || [];
+    propFilters.forEach(({ name, type }) => {
+      if(!filterBy(type, object[prop], filters[name])) pass = false;
+    })
+  });
+
+  return pass;
+}
+

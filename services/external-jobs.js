@@ -14,7 +14,7 @@ const getExternalJobs = async (filters = '') => {
   })
   .catch(() => {
     console.log('-- ERROR --', config.errorMessages.externalServerError);
-    return [];
+    return null;
   });
 
   return jobs;

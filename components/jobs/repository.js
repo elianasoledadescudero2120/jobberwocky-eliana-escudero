@@ -1,7 +1,7 @@
 import config from '../../config.js';
 import getExternalJobs from '../../services/external-jobs.js';
 import sendEmails from '../../services/send-emails.js';
-import { allEmpty, isEmpty } from '../../common/helpers/data-helpers.js';
+import { allEmpty, filterBy, isEmpty, parseToWorkWith } from '../../common/helpers/data-helpers.js';
 import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers.js';
 import { getAllSubscriptionsMatchingJob } from '../subscriptions/repository.js';
 
@@ -9,21 +9,28 @@ const { errorMessages, infoMessages } = config;
 
 export const getAllJobs = async ({ query: filters = {} }) => {
   const { source } = filters;
+  let response = {};
   let external = [];
   let local = [];
   
   if(isEmpty(source) || source === 'external'){
     external = await getExternalJobs(filters);
+    if(external === null ) {
+      response.code = 206;
+      response.extra= infoMessages.externalJobsMissing;
+      external = [];
+    }
+    //Filter by skills -- Not included in provided service
+    external = external.filter(externalJob => filterBy('includesAll', externalJob.skills, filters.skills));
   }
 
   if(isEmpty(source) || source === 'local'){
     const jobs = await retrieveJobs();
     local = jobs.filter(job => filterJob(job, filters));
   }
-
-  const all = joinJobs(local, external);
-  return { data: orderJobs(all, filters), 
-    ...((external.length === 0 && source !== 'local') && { code: 206, extra: infoMessages.externalJobsMissing }) } ;
+  
+  response.data = orderJobs(joinJobs(local, external), filters);
+  return response;
 }
 
 export const findJob = async ({ query: filters = {} }) => {

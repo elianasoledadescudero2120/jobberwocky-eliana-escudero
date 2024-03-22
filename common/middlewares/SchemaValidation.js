@@ -13,7 +13,7 @@ const SchemaValidation = {
 
     return (req, res, next) => {
       const { body } = req;
-      const ajv = new Ajv({ allErrors: true, coerceTypes: true });
+      const ajv = new Ajv({ allErrors: true, coerceTypes: true, strict: false });
       const validate = ajv.compile(schema);
       const isValid = validate(body);
 
@@ -36,7 +36,7 @@ const SchemaValidation = {
 export default SchemaValidation;
 
 export const isValidData  = (data, schema) => {
-  const ajv = new Ajv({ allErrors: true});
+  const ajv = new Ajv({ allErrors: true, strict: false});
   const validate = ajv.compile(schema);
   return validate(data);
 }
