@@ -29,13 +29,13 @@ router.post(
   JobsController.updateJob
 );
 
-router.post(
+router.delete(
   "/delete",
   [ SchemaValidation.verify(DeleteJobSchema)],
   JobsController.deleteJob
 );
 
-router.post(
+router.delete(
   "/deleteAll",
   [],
   JobsController.deleteAll

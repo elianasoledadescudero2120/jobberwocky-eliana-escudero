@@ -16,7 +16,7 @@ const config = {
     saveJob: 'Error while saving the job. Please try again.',
     saveSubscription: 'Error while saving the subscription. Please try again.',
     schemaNotProvided: `Schema not provided. ${contactMessage}`,
-    serverError: 'Server error. Possible invalid route.',
+    requestError: 'Not found. Possible invalid method.',
     updateJobValuesMissing: 'There isnt a job with the name provided. To create a new one please provide the salary, country and skills',
   },
   infoMessages: {

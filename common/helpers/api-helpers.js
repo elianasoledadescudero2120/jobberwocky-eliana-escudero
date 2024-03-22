@@ -6,7 +6,7 @@ const successResponse = (res, data, code, extra) => {
     });
 }
 
-const errorResponse = (res, { message, code, extra }) => {
+export const errorResponse = (res, { message, code, extra }) => {
     if(message) console.log('--- ERROR: ---', message);
     return res.status(code || 500).json({
         success: false,

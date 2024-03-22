@@ -29,13 +29,13 @@ router.post(
   SubscriptionsController.updateSubscription
 );
 
-router.post(
+router.delete(
   "/delete",
   [ SchemaValidation.verify(ABMSubscriptionSchema)],
   SubscriptionsController.deleteSubscription
 );
 
-router.post(
+router.delete(
   "/deleteAll",
   [],
   SubscriptionsController.deleteAll
