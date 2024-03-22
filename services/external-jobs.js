@@ -10,12 +10,7 @@ const getExternalJobs = async (filters = '') => {
     return data.json();
   })
   .then(data => {
-    return data.map(job => ({
-      name: job[0],
-      salary: job[1],
-      country: job[2],
-      skills: job[3] || [],
-    }));
+    return data.map(([ name, salary, country, skills = []]) => ({ name, salary, country, skills }));
   })
   .catch(() => {
     console.log('-- ERROR --', config.errorMessages.externalServerError);

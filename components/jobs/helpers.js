@@ -11,11 +11,11 @@ export const retrieveJobs = async () => {
     const data = await readFile(storagePaths.jobs)
     .then(data => !isEmpty(data) ? converter.csv2json(data) : [])
     .catch(err => {
-      throw {...err, message: errorMessages.readJobs};
+      throw {...err, message: errorMessages.readJobs, code: 500};
     })
   
     if(!isValidData(data, JobsSchema)) {
-      throw { message: errorMessages.corruptedData};
+      throw { message: errorMessages.corruptedData, code: 500 };
     }
   
     return parseToWorkWith(data);
@@ -27,7 +27,7 @@ export const saveJobs = async (jobs) => {
     const csv = await converter.json2csv(parseToSave(orderedJobs));
     await writeFile(storagePaths.jobs, csv)
     .catch(err => {
-      throw {...err, message: errorMessages.saveJob};
+      throw {...err, message: errorMessages.saveJob, code: 500 };
     });
 }
 

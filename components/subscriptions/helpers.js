@@ -11,11 +11,11 @@ export const retrieveSubscriptions = async () => {
     const data = await readFile(storagePaths.subscriptions)
     .then(data => !isEmpty(data) ? converter.csv2json(data) : [])
     .catch(err => {
-      throw {...err, message: errorMessages.readSubscriptions};
+      throw {...err, message: errorMessages.readSubscriptions, code: 500 };
     })
   
     if(!isValidData(data, SubscriptionsSchema)) {
-      throw { message: errorMessages.corruptedData};
+      throw { message: errorMessages.corruptedData, code: 500};
     }
   
     return parseToWorkWith(data);
@@ -27,7 +27,7 @@ export const saveSubscriptions = async (subscriptions) => {
     const csv = await converter.json2csv(parseToSave(orderedSubscriptions));
     await writeFile(storagePaths.subscriptions, csv)
     .catch(err => {
-      throw {...err, message: errorMessages.saveSubscription};
+      throw {...err, message: errorMessages.saveSubscription, code: 500 };
     });
 }
 

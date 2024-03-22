@@ -1,14 +1,25 @@
-export const successResponse = (res, data) => {
-    return res.status(200).json({
+const successResponse = (res, data, code, extra) => {
+    return res.status(code || 200).json({
         success: true,
         data,
+        ...(extra && { extra })
     });
 }
 
-export const errorResponse = (res, err) => {
-    if(err.message) console.log('--- ERROR: ---', err.message);
-    return res.status(500).json({
+const errorResponse = (res, { message, code, extra }) => {
+    if(message) console.log('--- ERROR: ---', message);
+    return res.status(code || 500).json({
         success: false,
-        error: err,
+        error: { message, extra },
     });
+}
+
+export const executeQuery = async (req, res, action) => {
+    try {
+      const { data, code, extra } =  await action(req);
+      return successResponse(res, data, code, extra);
+    }
+    catch (err) {
+      return errorResponse(res, err);
+    }
 }

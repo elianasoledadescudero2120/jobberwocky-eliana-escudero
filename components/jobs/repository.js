@@ -5,28 +5,30 @@ import { allEmpty, isEmpty } from '../../common/helpers/data-helpers.js';
 import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers.js';
 import { getAllSubscriptionsMatchingJob } from '../subscriptions/repository.js';
 
-const { errorMessages } = config;
+const { errorMessages, infoMessages } = config;
 
 export const getAllJobs = async ({ query: filters = {} }) => {
+  const { source } = filters;
   let external = [];
   let local = [];
-
-  if(isEmpty(filters.source) || filters.source === 'external'){
+  
+  if(isEmpty(source) || source === 'external'){
     external = await getExternalJobs(filters);
   }
 
-  if(isEmpty(filters.source) || filters.source === 'local'){
+  if(isEmpty(source) || source === 'local'){
     const jobs = await retrieveJobs();
     local = jobs.filter(job => filterJob(job, filters));
   }
 
   const all = joinJobs(local, external);
-  return { data: orderJobs(all, filters) } ;
+  return { data: orderJobs(all, filters), 
+    ...((external.length === 0 && source !== 'local') && { code: 206, extra: infoMessages.externalJobsMissing }) } ;
 }
 
 export const findJob = async ({ query: filters = {} }) => {
   if(allEmpty(filters, ['name', 'salary_min', 'salary_max', 'country', 'skills', 'order_by', 'source', 'order_direction'])) {
-    throw { message: errorMessages.filterJobValuesMissing};
+    throw { message: errorMessages.filterJobValuesMissing, code: 400 };
   }
 
   const allFilteredJobs = await getAllJobs({ query: filters });
@@ -37,7 +39,7 @@ export const createJob = async ({ body }) => {
   const jobs = await retrieveJobs();
 
   if(jobs.find(job => job.name.toLowerCase() === body.name.toLowerCase())) {
-    throw { message: errorMessages.repeatedJob};
+    throw { message: errorMessages.repeatedJob, code: 400 };
   }
  
   await saveJobs([...jobs, body]);
@@ -57,7 +59,7 @@ export const updateJob = async ({ body }) => {
   if(!job) {
     if(isEmpty(skills) || isEmpty(country) || isEmpty(salary))
     {
-      throw { message: errorMessages.updateJobValuesMissing};
+      throw { message: errorMessages.updateJobValuesMissing, code: 400 };
     }
     else {
       job = { name };
@@ -81,7 +83,7 @@ export const deleteJob = async ({body: { name }}) => {
   const jobs = await retrieveJobs();
   
   const job = jobs.find(job => job.name.toLowerCase() === name.toLowerCase());
-  if(!job) throw { message: errorMessages.missingJob};
+  if(!job) throw { message: errorMessages.missingJob, code: 400 };
 
   const newJobs = jobs.filter(job => job.name.toLowerCase() !== name.toLowerCase());
   await saveJobs(newJobs);

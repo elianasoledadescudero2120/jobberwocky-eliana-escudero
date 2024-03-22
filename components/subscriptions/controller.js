@@ -1,15 +1,5 @@
-import { errorResponse, successResponse } from '../../common/helpers/api-helpers.js'
+import { executeQuery } from '../../common/helpers/api-helpers.js'
 import { createSusbcription, deleteAllSubscriptions, deleteSubscription, findSubscription, getAllSubscriptions, updateSubscription } from './repository.js';
-
-const executeQuery = async (req, res, action) => {
-  try {
-    const { data } =  await action(req);
-    return successResponse(res, data);
-  }
-  catch (err) {
-    return errorResponse(res, err.message);
-  }
-}
 
 const SubscriptionsController = {
   getAllSubscriptions: async (req, res) => executeQuery(req, res, getAllSubscriptions),

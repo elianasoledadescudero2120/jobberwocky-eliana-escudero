@@ -8,7 +8,7 @@ const SchemaValidation = {
 
   verify: (schema) => {
     if (!schema) {
-      throw new Error(errorMessages.schemaNotProvided);
+      throw { message: errorMessages.schemaNotProvided, code: 500};
     }
 
     return (req, res, next) => {
@@ -24,7 +24,9 @@ const SchemaValidation = {
       return res.send({
         status: false,
         error: {
-          message: `Invalid data: ${ajv.errorsText(validate.errors)}`,
+          code: 500,
+          extra: `Invalid data: ${ajv.errorsText(validate.errors)}`,
+          message: errorMessages.dataFormatError,
         }
       });
     }

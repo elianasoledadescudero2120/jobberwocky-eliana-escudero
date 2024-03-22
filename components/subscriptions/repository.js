@@ -18,7 +18,7 @@ export const getAllSubscriptionsMatchingJob = async (jobData) => {
 
 export const findSubscription = async ({ query: filters = {} }) => {
   if(allEmpty(filters, ['name', 'email', 'country', 'skills'])) {
-    throw { message: errorMessages.filterSubscriptionValuesMissing};
+    throw { message: errorMessages.filterSubscriptionValuesMissing, code: 400};
   }
 
   const subscriptions = await retrieveSubscriptions();
@@ -32,7 +32,7 @@ export const createSusbcription = async ({ body }) => {
   const subscriptions = await retrieveSubscriptions();
   
   if(subscriptions.find(sub => sub.email.toLowerCase() === email.toLowerCase())) {
-    throw { message: errorMessages.repeatedSubscription};
+    throw { message: errorMessages.repeatedSubscription, code: 400};
   }
 
   await saveSubscriptions([...subscriptions, { email, name, country, skills, salary_min}]);
@@ -65,7 +65,7 @@ export const deleteSubscription = async ({body: { email }}) => {
   const subscriptions = await retrieveSubscriptions();
   
   const sub = subscriptions.find(sub => sub.email.toLowerCase() === email.toLowerCase());
-  if(!sub) throw { message: errorMessages.missingSubscription};
+  if(!sub) throw { message: errorMessages.missingSubscription, code: 400};
 
   const newSubscriptions = subscriptions.filter(sub => sub.email.toLowerCase() !== email.toLowerCase());
   await saveSubscriptions(newSubscriptions);
