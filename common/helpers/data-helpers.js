@@ -1,3 +1,4 @@
+/* ----- EMPTY FUNCTIONS -------- */
 
 export const isEmptyString = str => !str?.trim();
 export const isEmptyArray = arr => !arr?.length;
@@ -20,6 +21,8 @@ export const allEmpty = (object, properties) => {
   return empty;
 }
 
+/* ----- PARSE FUNCTIONS -------- */
+
 export const parseToWorkWith = data => {
   const mapItem = (item) => ({
       ...item,
@@ -37,6 +40,8 @@ export const parseToSave = data => {
   }))
 }
 
+/* ----- ORDER FUNCTIONS -------- */
+
 export const orderByStringValue = (items, key, direction = 'asc') => {
   if(direction.toLowerCase() === 'asc') return items.sort((a, b) => a[key].toLowerCase().localeCompare(b[key].toLowerCase()));
   else return items.sort((a, b) => b[key].toLowerCase().localeCompare(a[key].toLowerCase()));
@@ -47,6 +52,8 @@ export const orderByIntegerValue = (items, key, direction = 'asc') => {
   else return items.sort((a, b) => b[key] - a[key]);
 }
 
+/* ----- FILTER FUNCTIONS -------- */
+
 export const filterBy = (type, value, filter) => {
   if(filter === undefined) return true;
 
@@ -56,9 +63,9 @@ export const filterBy = (type, value, filter) => {
     'lessThan': () => value <= filter,
     'greaterThan': () => value >= filter,
     'includesAll': () => {
-      const valueToLowerCase = value.map(item => item.toLowerCase());
+      const arrayValue = value.map(item => item.toLowerCase());
       const arrayFilter = !Array.isArray(filter) ? filter.split(',') : filter;
-      return arrayFilter.every(f => valueToLowerCase.includes(f.toLowerCase()));
+      return arrayFilter.every(f => arrayValue.includes(f.toLowerCase()));
     },
   }
 

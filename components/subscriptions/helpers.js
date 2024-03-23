@@ -1,7 +1,7 @@
 import config from "../../config.js";
 import converter from 'json-2-csv';
-import { SubscriptionsSchema } from './schema.js';
-import { isEmpty, orderByStringValue, parseToSave, parseToWorkWith } from '../../common/helpers/data-helpers.js';
+import { SubscriptionSchema, SubscriptionsSchema } from './schema.js';
+import { filterObject, isEmpty, orderByStringValue, parseToSave, parseToWorkWith } from '../../common/helpers/data-helpers.js';
 import { isValidData } from '../../common/middlewares/SchemaValidation.js';
 import { readFile, writeFile } from '../../common/helpers/file-helpers.js';
 
@@ -31,17 +31,7 @@ export const saveSubscriptions = async (subscriptions) => {
     });
 }
 
-export const filterSubscription = (sub, reqFilters) => {
-    const filters = parseToWorkWith(reqFilters);
-    const filterSkills = filters.skills.map(skill => skill.toLowerCase())
-    const subSkills = sub.skills.map(skill => skill.toLowerCase());
-
-    return (filters.email === undefined || sub.email.toLowerCase().includes(filters.email.toLowerCase()))
-        && (filters.name === undefined || sub.name.toLowerCase().includes(filters.name.toLowerCase()))
-        && (filters.country === undefined || sub.country.toLowerCase() === filters.country.toLowerCase())
-        && (filters.skills === undefined || filterSkills.every(s => subSkills.includes(s)))
-        && (filters.salary === undefined || sub.salary_min <= filters.salary)
-}
+export const filterSubscription = (sub, filters) => filterObject(SubscriptionSchema, sub, filters);
 
 export const filterSubscriptionForJob = (sub, job) => {
     const jobData = parseToWorkWith(job);

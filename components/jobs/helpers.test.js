@@ -33,13 +33,13 @@ describe('retrieveJobs', () => {
 
   test('It should throw error when read file failed', async () => {
     jest.spyOn(fileHelpers, "readFile").mockRejectedValue(new Error());
-    expectError(retrieveJobs, 'readJobs', null);
+    expectError(retrieveJobs, 'readJobs', 500, null);
   });
 
   test('It should throw error when data is not valid according to schema', async () => {
     jest.spyOn(fileHelpers, "readFile").mockResolvedValue('someValue');
     mockCsvToJson = jest.fn();
-    expectError(retrieveJobs, 'corruptedData', null);
+    expectError(retrieveJobs, 'corruptedData', 500, null);
   });
 });
 
@@ -51,7 +51,7 @@ describe('saveJobs', () => {
 
     test('It should throw error if writing to file fails', async () => {
       jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
-      expectError(saveJobs, 'saveJob', jobs);
+      expectError(saveJobs, 'saveJob', 500, jobs);
     });
 });
 

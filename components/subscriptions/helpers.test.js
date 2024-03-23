@@ -33,13 +33,13 @@ describe('retrieveSubscriptions', () => {
 
   test('It should throw error when read file failed', async () => {
     jest.spyOn(fileHelpers, "readFile").mockRejectedValue(new Error());
-    expectError(retrieveSubscriptions, 'readSubscriptions', null);
+    expectError(retrieveSubscriptions, 'readSubscriptions', 500, null);
   });
 
   test('It should throw error when data is not valid according to schema', async () => {
     jest.spyOn(fileHelpers, "readFile").mockResolvedValue('someValue');
     mockCsvToJson = jest.fn();
-    expectError(retrieveSubscriptions, 'corruptedData', null);
+    expectError(retrieveSubscriptions, 'corruptedData', 500, null);
   });
 });
 
@@ -51,7 +51,7 @@ describe('saveSubscriptions', () => {
 
   test('It should throw error if writing to file fails', async () => {
       jest.spyOn(fileHelpers, "writeFile").mockRejectedValue(new Error());
-      expectError(saveSubscriptions, 'saveSubscription', subscriptions);
+      expectError(saveSubscriptions, 'saveSubscription', 500, subscriptions);
   });
 });
 

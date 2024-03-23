@@ -113,7 +113,7 @@ describe('getAllJobs', () => {
     test('It should reject if another job with the same name is already in storage', async () => {
         jest.spyOn(console, 'log').mockImplementation(jest.fn());
         const body = getLocalJob(4);
-        expectError(createJob, 'repeatedJob', { body });
+        expectError(createJob, 'repeatedJob', 400, { body });
     });
 
     test('It should log matching subscriptions for the job', async () => {
@@ -154,7 +154,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if missing fields and job is going to be created', async () => {
         const body = { name: 'name6', country: 'country6' };
-        expectError(updateJob, 'updateJobValuesMissing', { body });   
+        expectError(updateJob, 'updateJobValuesMissing', 400, { body });   
     });
   });
 
@@ -171,7 +171,7 @@ describe('getAllJobs', () => {
 
     test('It should reject if job isnt found in storage', async () => {
         const body = getLocalJob(7);
-        expectError(deleteJob, 'missingJob', { body });  
+        expectError(deleteJob, 'missingJob', 400, { body });  
     });
   });
 

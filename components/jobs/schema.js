@@ -17,7 +17,7 @@ export const JobSchema = {
       country: {
         type: "string",
         filters: [
-          { name: "country", type: "stringEquals" }
+          { name: "country", type: "stringEqual" }
         ]
       },
       skills: {

@@ -100,7 +100,7 @@ describe('getAllSubscriptions', () => {
 
     test('It should reject if another subscription with the same email is already in storage', async () => {
         const body = getSubscription(4);
-        expectError(createSusbcription, 'repeatedSubscription', { body }); 
+        expectError(createSusbcription, 'repeatedSubscription', 400, { body }); 
     });
   });
 
@@ -141,7 +141,7 @@ describe('getAllSubscriptions', () => {
 
     test('It should reject if subscription isnt found in storage', async () => {
         const body = getSubscription(7);
-        expectError(deleteSubscription, 'missingSubscription', { body }); 
+        expectError(deleteSubscription, 'missingSubscription', 400, { body }); 
     });
   });
 

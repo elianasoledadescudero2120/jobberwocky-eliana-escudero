@@ -23,10 +23,10 @@ export const getSubscription = (index) => ({
     skills: [`node${index}`,`java${index}`],
 });
 
-export const expectError = async (functionToCall, errorMessage, parameters = null) => {
+export const expectError = async (functionToCall, errorMessage, code, parameters = null) => {
     const errorCatch = jest.fn();
     await functionToCall(parameters).catch(errorCatch);
-    expect(errorCatch).toHaveBeenCalledWith({message: errorMessages[errorMessage]}); 
+    expect(errorCatch).toHaveBeenCalledWith({code, message: errorMessages[errorMessage]}); 
 }
 
 export const expectNotError = async (functionToCall, parameters = null) => {

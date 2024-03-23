@@ -1,7 +1,7 @@
 import config from '../../config.js';
 import getExternalJobs from '../../services/external-jobs.js';
 import sendEmails from '../../services/send-emails.js';
-import { allEmpty, filterBy, isEmpty, parseToWorkWith } from '../../common/helpers/data-helpers.js';
+import { allEmpty, filterBy, isEmpty } from '../../common/helpers/data-helpers.js';
 import { filterJob, joinJobs, orderJobs, retrieveJobs, saveJobs } from './helpers.js';
 import { getAllSubscriptionsMatchingJob } from '../subscriptions/repository.js';
 
@@ -16,8 +16,7 @@ export const getAllJobs = async ({ query: filters = {} }) => {
   if(isEmpty(source) || source === 'external'){
     external = await getExternalJobs(filters);
     if(external === null ) {
-      response.code = 206;
-      response.extra= infoMessages.externalJobsMissing;
+      response = { code: 206, extra: infoMessages.externalJobsMissing };
       external = [];
     }
     //Filter by skills -- Not included in provided service
@@ -28,9 +27,8 @@ export const getAllJobs = async ({ query: filters = {} }) => {
     const jobs = await retrieveJobs();
     local = jobs.filter(job => filterJob(job, filters));
   }
-  
-  response.data = orderJobs(joinJobs(local, external), filters);
-  return response;
+
+  return {...response, data: orderJobs(joinJobs(local, external), filters)};
 }
 
 export const findJob = async ({ query: filters = {} }) => {
@@ -74,7 +72,7 @@ export const updateJob = async ({ body }) => {
   }
 
   const updatedJob = {
-    ...job, 
+    ...job,
     ...(!isEmpty(salary) && {salary}),
     ...(!isEmpty(country) && {country}),
     ...(!isEmpty(skills) && {skills})
