@@ -10,6 +10,10 @@ Additionally, the following libraries were used:
 - **nodemon**: automatically restars the application when file changes in the directory are detected.
 - **jest**: for testing purposes.
 
+## Testing environment
+
+This project can be tested using the following public workspace: https://www.postman.com/gold-astronaut-408602/workspace/jobberwoky-api-workspace
+
 ## Instalation and setup
 
 I recommend using node v18
@@ -60,8 +64,8 @@ Accepts the following query parameters:
 - salary_max
 - country
 - skills ------------ (value: string with skills comma separated)
-- order_by ---------- (possible values: [name, salary, country]) _(name by default)_
-- order_direction --- (possible values: 'asc', 'desc') _(asc by default)_
+- order*by ---------- (possible values: [name, salary, country]) *(name by default)\_
+- order*direction --- (possible values: 'asc', 'desc') *(asc by default)\_
 - source ------------ (possible values: [local, external]) _(local + external by default)_
 
 Offers a list of jobs, filtered by query parameters. The name acts as a key and its unique.
@@ -174,7 +178,7 @@ If a job with the name entered is not found, a new one is created. This action r
 
 If update is successful it returns the job updated.
 
-#### E. DELETE (POST)
+#### E. DELETE (DELETE)
 
 Accessible through [http://localhost:3002/job/delete](http://localhost:3002/job/delete)
 
@@ -186,7 +190,7 @@ Deletes the job stored in application with name equal to name parameter.
 
 If deletion is successful it returns the job deleted.
 
-#### F. DELETEALL (POST)
+#### F. DELETEALL (DELETE)
 
 Accessible through [http://localhost:3002/job/deleteAll](http://localhost:3002/job/deleteAll)
 
@@ -276,7 +280,7 @@ If a subscription with the email entered is not found, a new one is created.
 
 If update is successful it returns the subscription updated.
 
-#### E. DELETE (POST)
+#### E. DELETE (DELETE)
 
 Accessible through [http://localhost:3002/subscription/delete](http://localhost:3002/subscription/delete)
 
@@ -288,7 +292,7 @@ Deletes the subscription stored in application with email equal to email paramet
 
 If deletion is successful it returns the subscription deleted.
 
-#### F. DELETEALL (POST)
+#### F. DELETEALL (DELETE)
 
 Accessible through [http://localhost:3002/subscription/deleteAll](http://localhost:3002/subscription/deleteAll)
 
