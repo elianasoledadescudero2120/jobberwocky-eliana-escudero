@@ -21,13 +21,9 @@ const SchemaValidation = {
         return next();
       }
 
-      return res.send({
-        status: false,
-        error: {
-          code: 500,
-          extra: `Invalid data: ${ajv.errorsText(validate.errors)}`,
-          message: errorMessages.dataFormatError,
-        }
+      return res.status(400).json({
+        success: false,
+        error: { message: `Invalid data: ${ajv.errorsText(validate.errors)}` },
       });
     }
   }
